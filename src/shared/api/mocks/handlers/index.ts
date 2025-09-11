@@ -6,10 +6,18 @@ const boards: ApiSchemas["Board"][] = [
   {
     id: "board-1",
     name: "Marketing Campaign",
+    createdAt: "",
+    updatedAt: "",
+    lastOpenedAt: "",
+    isFavorite: false
   },
   {
     id: "board-2",
     name: "Product Roadmap",
+    createdAt: "",
+    updatedAt: "",
+    lastOpenedAt: "",
+    isFavorite: false
   },
 ];
 
