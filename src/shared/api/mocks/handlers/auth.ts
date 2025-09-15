@@ -18,16 +18,6 @@ export const authHandlers = [
   http.post("/auth/login", async ({ request }) => {
     const body = await request.json();
 
-
-
-
-
-
-
-
-
-    
-
     const user = mockUsers.find((u) => u.email === body.email);
     const storedPassword = userPasswords.get(body.email);
 
@@ -52,7 +42,7 @@ export const authHandlers = [
   }),
 
   http.post("/auth/register", async ({ request }) => {
-    const body = (await request.json()) as ApiSchemas["RegisterRequest"];
+    const body = await request.json();
 
     if (mockUsers.some((u) => u.email === body.email)) {
       return HttpResponse.json(
