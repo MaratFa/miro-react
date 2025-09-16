@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { AuthLayout } from "./auth-layout";
 
 function LoginPage() {
+  console.log(ROUTES.REGISTER);
+  
   return (
     <AuthLayout
       title="Log in"
