@@ -1,6 +1,7 @@
 import type { ApiSchemas } from "../../schema";
 import { http } from "../http";
-import { HttpResponse } from "msw";
+import { delay, HttpResponse } from "msw";
+import { createRefreshTokenCookie, generateTokens } from "../session";
 
 const mockUsers: ApiSchemas["User"][] = [
   {
@@ -21,6 +22,8 @@ export const authHandlers = [
     const user = mockUsers.find((u) => u.email === body.email);
     const storedPassword = userPasswords.get(body.email);
 
+    await delay();
+
     if (!user || !storedPassword || storedPassword !== body.password) {
       return HttpResponse.json(
         {
@@ -31,18 +34,29 @@ export const authHandlers = [
       );
     }
 
-    const token = `mock-token-${Date.now()}`;
+    
+    const { accessToken, refreshToken } = await generateTokens({
+      userId: user.id,
+      email: user.email,
+    });
     return HttpResponse.json(
       {
-        accessToken: token,
+        accessToken: accessToken,
         user,
       },
-      { status: 200 }
+      {
+        status: 200,
+        headers: {
+          "Set-Cookie": createRefreshTokenCookie(refreshToken),
+        },
+      }
     );
   }),
-
+  
   http.post("/auth/register", async ({ request }) => {
     const body = await request.json();
+
+    await delay();
 
     if (mockUsers.some((u) => u.email === body.email)) {
       return HttpResponse.json(
@@ -54,15 +68,25 @@ export const authHandlers = [
       );
     }
 
+
     const newUser: ApiSchemas["User"] = {
       id: String(mockUsers.length + 1),
       email: body.email,
     };
 
-    const token = `mock-token-${Date.now()}`;
+
+
+
+
+
+
+
+
+
+
+    
     mockUsers.push(newUser);
     userPasswords.set(body.email, body.password);
-    mockTokens.set(body.email, token);
 
     return HttpResponse.json(
       {
