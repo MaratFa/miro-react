@@ -1,10 +1,9 @@
 import { ROUTES } from "@/shared/model/routes";
 import { Link } from "react-router-dom";
-import { AuthLayout } from "./model/use-login";
+import { AuthLayout } from "./ui/auth-layout";
 import { LoginForm } from "./ui/login-form";
 
 function LoginPage() {
-  
   return (
     <AuthLayout
       title="Log in"
