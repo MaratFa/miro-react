@@ -1,4 +1,4 @@
-import { SignJWT, jwtVerify } from 'jose';
+import { SignJWT, jwtVerify } from "jose";
 import { HttpResponse } from "msw";
 
 type Session = {
@@ -13,7 +13,6 @@ const REFRESH_TOKEN_EXPIRY = "7d";
 export function createRefreshTokenCookie(refreshToken: string) {
   return `refreshToken=${refreshToken}; Max-Age=604800`;
 }
-
 
 export async function generateTokens(session: Session) {
   const accessToken = await new SignJWT(session)
@@ -45,7 +44,7 @@ export async function verifyTokenOrThrow(request: Request): Promise<Session> {
         message: "Invalid token",
         code: "INVALID_TOKEN",
       },
-      { status: 401 },
+      { status: 401 }
     );
   }
   return session;
