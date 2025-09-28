@@ -21,7 +21,7 @@ export function AppHeader() {
             onClick={() => logout()}
             className="hover:bg-destructive/10"
           >
-            Logout
+            Выйти
           </Button>
         </div>
       </div>
