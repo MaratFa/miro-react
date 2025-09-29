@@ -9,7 +9,7 @@ import {
   BoardsListLayoutHeader,
   BoardsListLayoutList,
 } from "./ui/boards-list-layout";
-import { ViewMode, ViewModeToggle } from "./ui/view-mode-toggle";
+import { type ViewMode, ViewModeToggle } from "./ui/view-mode-toggle";
 
 import { useRecentGroups } from "./model/use-recent-groups";
 

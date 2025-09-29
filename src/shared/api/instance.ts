@@ -31,7 +31,7 @@ fetchClient.use({
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
     }
   },

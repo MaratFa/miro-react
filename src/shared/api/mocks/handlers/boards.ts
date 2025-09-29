@@ -1,6 +1,6 @@
 import { delay, HttpResponse } from "msw";
 import { http } from "../http";
-import { ApiSchemas } from "../../schema";
+import type { ApiSchemas } from "../../schema";
 import { verifyTokenOrThrow } from "../session";
 
 // Функция для генерации случайной даты в пределах последних 30 дней

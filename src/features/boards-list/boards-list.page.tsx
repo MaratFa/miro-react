@@ -12,7 +12,7 @@ import {
   BoardsListLayoutFilters,
   BoardsListLayoutHeader,
 } from "./ui/boards-list-layout";
-import { ViewMode, ViewModeToggle } from "./ui/view-mode-toggle";
+import { type ViewMode, ViewModeToggle } from "./ui/view-mode-toggle";
 import { BoardsSortSelect } from "./ui/boards-sort-select";
 import { BoardsSearchInput } from "./ui/boards-search-input";
 import { BoardItem } from "./compose/board-item";

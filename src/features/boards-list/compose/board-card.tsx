@@ -1,4 +1,4 @@
-import { ApiSchemas } from "@/shared/api/schema";
+import type { ApiSchemas } from "@/shared/api/schema";
 import { BoardsFavoriteToggle } from "../ui/boards-favorite-toggle";
 import { BoardsListCard } from "../ui/boards-list-card";
 import { Button } from "@/shared/ui/kit/button";

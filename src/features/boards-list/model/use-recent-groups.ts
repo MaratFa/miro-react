@@ -1,4 +1,4 @@
-import { ApiSchemas } from "@/shared/api/schema";
+import type { ApiSchemas } from "@/shared/api/schema";
 
 type BoardsGroup = {
   title: string;
