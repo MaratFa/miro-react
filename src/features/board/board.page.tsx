@@ -6,6 +6,10 @@ function BoardPage() {
   return (
     <Layout>
       <Dots />
+      <Canvas>
+        <Sticker text="Hello" x={100} y={100} />
+        <Sticker text="Hello" x={200} y={200} />
+      </Canvas>
     </Layout>
   );
 }
@@ -34,5 +38,49 @@ function Canvas({
     <div {...props} className="absolute inset-0">
       {children}
     </div>
+  );
+}
+
+function Sticker({ text, x, y }: { text: string; x: number; y: number }) {
+  return (
+    <div
+      className="absolute bg-yellow-300 px-2 py-4 rounded-xs shadow-md"
+      style={{ transform: `translate(${x}px, ${y}px)` }}
+    >
+      {text}
+    </div>
+  );
+}
+
+function Actions({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="absolute left-4 top-1/2 -translate-y-1/2 flex flex-col gap-2 bg-white p-1 rounded-md shadow">
+      {children}
+    </div>
+  );
+}
+
+function ActionButton({
+  children,
+  isActive,
+  onClick,
+}: {
+  children: React.ReactNode;
+  isActive: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      className={
+        isActive
+          ? "bg-blue-500/30 hover:bg-blue-600/30 text-blue-500 hover:text-blue-600"
+          : ""
+      }
+      onClick={onClick}
+    >
+      {children}
+    </Button>
   );
 }
