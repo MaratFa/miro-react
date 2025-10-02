@@ -1,4 +1,5 @@
 import { type PathParams, ROUTES } from "@/shared/model/routes";
+import { ArrowRightIcon, StickerIcon } from "lucide-react";
 import { useParams } from "react-router-dom";
 
 function BoardPage() {
@@ -10,6 +11,14 @@ function BoardPage() {
         <Sticker text="Hello" x={100} y={100} />
         <Sticker text="Hello" x={200} y={200} />
       </Canvas>
+      <Actions>
+        <ActionButton isActive={false} onClick={() => {}}>
+          <StickerIcon />
+        </ActionButton>
+        <ActionButton isActive={false} onClick={() => {}}>
+          <ArrowRightIcon />
+        </ActionButton>
+      </Actions>
     </Layout>
   );
 }
