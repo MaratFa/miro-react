@@ -1,27 +1,27 @@
 import { type PathParams, ROUTES } from "@/shared/model/routes";
 import { Button } from "@/shared/ui/kit/button";
 import { ArrowRightIcon, StickerIcon } from "lucide-react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 
+type NodeBase = {
+  id: string;
+  type: string;
+}
 
+type StickerNode = NodeBase & {
+  type: "sticker";
+  text: string;
+  x: number;
+  y: number;
+};
 
+type Node = StickerNode;
 
+function useNodes() {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  const [nodes, setNodes] = useState<Node[]>([]);
+} 
 
 function BoardPage() {
   const params = useParams<PathParams[typeof ROUTES.BOARD]>();
