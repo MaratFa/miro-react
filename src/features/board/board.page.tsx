@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 type NodeBase = {
   id: string;
   type: string;
-}
+};
 
 type StickerNode = NodeBase & {
   type: "sticker";
@@ -19,9 +19,27 @@ type StickerNode = NodeBase & {
 type Node = StickerNode;
 
 function useNodes() {
+  const [nodes] = useState<Node[]>([
+    {
+      id: "1",
+      type: "sticker",
+      text: "Hello",
+      x: 100,
+      y: 100,
+    },
+    {
+      id: "2",
+      type: "sticker",
+      text: "Hello",
+      x: 200,
+      y: 200,
+    },
+  ]);
 
-  const [nodes, setNodes] = useState<Node[]>([]);
-} 
+  return {
+    nodes,
+  }
+}
 
 function BoardPage() {
   const params = useParams<PathParams[typeof ROUTES.BOARD]>();
