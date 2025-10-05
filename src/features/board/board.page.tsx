@@ -1,8 +1,6 @@
-import { type PathParams, ROUTES } from "@/shared/model/routes";
 import { Button } from "@/shared/ui/kit/button";
 import { ArrowRightIcon, StickerIcon } from "lucide-react";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
 
 type NodeBase = {
   id: string;
@@ -23,32 +21,43 @@ function useNodes() {
     {
       id: "1",
       type: "sticker",
-      text: "Hello",
+      text: "Hello 1",
       x: 100,
       y: 100,
     },
     {
       id: "2",
       type: "sticker",
-      text: "Hello",
+      text: "Hello 2",
       x: 200,
       y: 200,
     },
   ]);
 
+  const addSticker = (data: { text: string; x: number; y: number }) => {
+    nodes.push({
+      id: crypto.randomUUID(),
+      type: "sticker",
+      ...data,
+    });
+  };
+
   return {
     nodes,
-  }
+    addSticker,
+  };
 }
 
 function BoardPage() {
-  const params = useParams<PathParams[typeof ROUTES.BOARD]>();
+  const { nodes, addSticker } = useNodes();
+
   return (
     <Layout>
       <Dots />
       <Canvas>
-        <Sticker text="Hello" x={100} y={100} />
-        <Sticker text="Hello" x={200} y={200} />
+        {nodes.map((node) => (
+          <Sticker text={node.text} x={node.x} y={node.y} />
+        ))}
       </Canvas>
       <Actions>
         <ActionButton isActive={false} onClick={() => {}}>
