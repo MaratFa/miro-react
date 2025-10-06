@@ -1,37 +1,75 @@
-import { Button } from "@/shared/ui/kit/button";
 import { ArrowRightIcon, StickerIcon } from "lucide-react";
+import { Button } from "@/shared/ui/kit/button";
 import { useNodes } from "./nodes";
 import { useBoardViewState } from "./view-state";
-import { Ref, RefCallback, useCallback } from "react";
+import { Ref, useEffect, useRef } from "react";
+import { useCanvasRect } from "./use-canvas-rect";
 
-const useCanvasRect = () => {
-  const canvasRef: RefCallback<HTMLDivElement> = useCallback((el) => {
-    console.log(el);
-    
-    return () => {};
-  }, []);
+function useLayoutFocus() {
+  const layoutRef = useRef<HTMLDivElement>(null);
 
-  return {
-    canvasRef,
-  };
-};
+  useEffect(() => {
+    if (layoutRef.current) {
+      layoutRef.current.focus();
+    }
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        layoutRef.current?.focus();
+      }
+    };
+
+    window.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [layoutRef]);
+
+  return layoutRef;
+}
 
 function BoardPage() {
   const { nodes, addSticker } = useNodes();
   const { viewState, goToIdle, goToAddSticker } = useBoardViewState();
-  const { canvasRef } = useCanvasRect();
+  const focusLayoutRef = useLayoutFocus(); // Ended here
+
+
+
+
+
+
+
+  
+
+  const { canvasRef, canvasRect } = useCanvasRect();
+
+  console.log(canvasRect);
 
   return (
-    <Layout>
+    <Layout
+      onKeyDown={(e) => {
+        if (viewState.type === "add-sticker") {
+          if (e.key === "Escape") {
+            goToIdle();
+          }
+        }
+        if (viewState.type === "idle") {
+          if (e.key === "s") {
+            goToAddSticker();
+          }
+        }
+      }}
+    >
       <Dots />
       <Canvas
-      ref={canvasRef}
+        ref={canvasRef}
         onClick={(e) => {
-          if (viewState.type === "add-sticker") {
+          if (viewState.type === "add-sticker" && canvasRect) {
             addSticker({
               text: "Default",
-              x: e.clientX,
-              y: e.clientY,
+              x: e.clientX - canvasRect.x,
+              y: e.clientY - canvasRect.y,
             });
             goToIdle();
           }
@@ -64,9 +102,9 @@ function BoardPage() {
 
 export const Component = BoardPage;
 
-function Layout({ children }: { children: React.ReactNode }) {
+function Layout({ children, ...props }: { children: React.ReactNode }) {
   return (
-    <div className="grow relative" tabIndex={0}>
+    <div className="grow relative" tabIndex={0} {...props}>
       {children}
     </div>
   );
