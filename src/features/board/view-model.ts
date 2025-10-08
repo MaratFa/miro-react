@@ -11,7 +11,7 @@ type IdleViewState = {
 
 type ViewState = AddStickerViewState | IdleViewState;
 
-export function useBoardViewState() {
+export function useViewModel() {
   const [viewState, setViewState] = useState<ViewState>({
     type: "idle",
     selectedIds: new Set(),
