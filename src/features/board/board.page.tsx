@@ -5,6 +5,7 @@ import { useBoardViewState } from "./view-model";
 import { Ref } from "react";
 import { useCanvasRect } from "./use-canvas-rect";
 import { useLayoutFocus } from "./use-layout-focus";
+import clsx from "clsx";
 
 function BoardPage() {
   const { nodes, addSticker } = useNodes();
@@ -46,7 +47,24 @@ function BoardPage() {
         }}
       >
         {nodes.map((node) => (
-          <Sticker text={node.text} x={node.x} y={node.y} />
+          <Sticker
+            text={node.text}
+            x={node.x}
+            y={node.y}
+            selected={
+              viewModel.viewState.type === "idle" &&
+              viewModel.viewState.selectedIds.has(node.id)
+            }
+            onClick={(e) => {
+              if (viewModel.viewState.type === "idle") {
+                if (e.ctrlKey || e.shiftKey) {
+                  viewModel.selection([node.id], "toggle");
+                } else {
+                  viewModel.selection([node.id], "replace");
+                }
+              }
+            }}
+          />
         ))}
       </Canvas>
       <Actions>
@@ -108,14 +126,30 @@ function Canvas({
   );
 }
 
-function Sticker({ text, x, y }: { text: string; x: number; y: number }) {
+function Sticker({
+  text,
+  x,
+  y,
+  onClick,
+  selected,
+}: {
+  text: string;
+  x: number;
+  y: number;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  selected: boolean;
+}) {
   return (
-    <div
-      className="absolute bg-yellow-300 px-2 py-4 rounded-xs shadow-md"
+    <button
+      className={clsx(
+        "absolute bg-yellow-300 px-2 py-4 rounded-xs shadow-md",
+        selected && "outline outline-2 outline-blue-500"
+      )}
       style={{ transform: `translate(${x}px, ${y}px)` }}
+      onClick={onClick}
     >
       {text}
-    </div>
+    </button>
   );
 }
 
