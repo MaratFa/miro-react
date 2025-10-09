@@ -7,98 +7,11 @@ import { useCanvasRect } from "./use-canvas-rect";
 import { useLayoutFocus } from "./use-layout-focus";
 import clsx from "clsx";
 
-type ViewModeNode = {
-  id: string;
-  text: string;
-  x: number;
-  y: number;
-  isSelected?: boolean;
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-};
-
-type ViewModel = {
-  nodes: ViewModeNode[];
-  layot?: {
-    onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
-  };
-  canvas?: {
-    onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
-  };
-  actions?: {
-    addSticker?: {
-      onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-      isActive?: boolean;
-    };
-  };
-};
-
 function BoardPage() {
   const { nodes, addSticker } = useNodes();
   const viewModelLast = useViewStateModel();
   const focusLayoutRef = useLayoutFocus();
   const { canvasRef, canvasRect } = useCanvasRect();
-
-  let viewModel: ViewModel;
-
-  switch (viewModelLast.viewState.type) {
-    case "add-sticker":
-      viewModel = {
-        nodes: nodes,
-        layot: {
-          onKeyDown: (e) => {
-            if (e.key === "Escape") {
-              viewModelLast.goToIdle();
-            }
-          },
-        },
-        canvas: {
-          onClick: (e) => {
-            if (!canvasRect) return;
-            addSticker({
-              text: "Default",
-              x: e.clientX - canvasRect.x,
-              y: e.clientY - canvasRect.y,
-            });
-            viewModelLast.goToIdle();
-          },
-        },
-      };
-      break;
-    case "idle": {
-      const viewState = viewModelLast.viewState;
-      viewModel = {
-        nodes: nodes.map((node) => ({
-          ...node,
-          isSelected: viewState.selectedIds.has(node.id),
-          onClick: (e) => {
-            if (e.ctrlKey || e.shiftKey) {
-              viewModelLast.selection([node.id], "toggle");
-            } else {
-              viewModelLast.selection([node.id], "replace");
-            }
-          },
-        })),
-        layot: {
-          onKeyDown: (e) => {
-            if (e.key === "s") {
-              viewModelLast.goToAddSticker();
-            }
-          },
-        },
-        actions: {
-          addSticker: {
-            isActive: false,
-            onClick: () => {
-              viewModelLast.goToAddSticker();
-            },
-          },
-        },
-      };
-      break;
-    }
-    default:
-      throw new Error("Invalid view state");
-  }
 
   return (
     <Layout ref={focusLayoutRef} onKeyDown={viewModel.layot?.onKeyDown}>
