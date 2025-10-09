@@ -1,7 +1,7 @@
 import { ArrowRightIcon, StickerIcon } from "lucide-react";
 import { Button } from "@/shared/ui/kit/button";
 import { useNodes } from "./nodes";
-import { useViewModel } from "./view-model";
+import { useViewStateModel } from "./view-state-model";
 import { Ref } from "react";
 import { useCanvasRect } from "./use-canvas-rect";
 import { useLayoutFocus } from "./use-layout-focus";
@@ -24,11 +24,17 @@ type ViewModel = {
   canvas?: {
     onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
   };
+  actions?: {
+    addSticker?: {
+      onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+      isActive?: boolean;
+    };
+  };
 };
 
 function BoardPage() {
   const { nodes, addSticker } = useNodes();
-  const viewModelLast = useViewModel();
+  const viewModelLast = useViewStateModel();
   const focusLayoutRef = useLayoutFocus();
   const { canvasRef, canvasRect } = useCanvasRect();
 
@@ -79,6 +85,14 @@ function BoardPage() {
             }
           },
         },
+        actions: {
+          addSticker: {
+            isActive: false,
+            onClick: () => {
+              viewModelLast.goToAddSticker();
+            },
+          },
+        },
       };
       break;
     }
@@ -103,14 +117,8 @@ function BoardPage() {
       </Canvas>
       <Actions>
         <ActionButton
-          isActive={viewModelLast.viewState.type === "add-sticker"}
-          onClick={() => {
-            if (viewModelLast.viewState.type === "add-sticker") {
-              viewModelLast.goToIdle();
-            } else {
-              viewModelLast.goToAddSticker();
-            }
-          }}
+          isActive={viewModel.actions?.addSticker?.isActive}
+          onClick={viewModel.actions?.addSticker?.onClick}
         >
           <StickerIcon />
         </ActionButton>
@@ -177,7 +185,7 @@ function Sticker({
     <button
       className={clsx(
         "absolute bg-yellow-300 px-2 py-4 rounded-xs shadow-md",
-        selected && "outline outline-2 outline-blue-500"
+        selected && "outline outline-blue-500"
       )}
       style={{ transform: `translate(${x}px, ${y}px)` }}
       onClick={onClick}
@@ -201,8 +209,8 @@ function ActionButton({
   onClick,
 }: {
   children: React.ReactNode;
-  isActive: boolean;
-  onClick: () => void;
+  isActive?: boolean;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }) {
   return (
     <Button
