@@ -1,17 +1,24 @@
 import { ArrowRightIcon, StickerIcon } from "lucide-react";
 import { Button } from "@/shared/ui/kit/button";
-import { useNodes } from "./nodes";
-import { useViewStateModel } from "./view-state-model";
+import { useNodes } from "./model/nodes";
+import { useViewState } from "./model/view-state";
 import { Ref } from "react";
-import { useCanvasRect } from "./use-canvas-rect";
-import { useLayoutFocus } from "./use-layout-focus";
+import { useCanvasRect } from "./hooks/use-canvas-rect";
+import { useLayoutFocus } from "./hooks/use-layout-focus";
 import clsx from "clsx";
+import { useViewModel } from "./view-model/use-view-model";
 
 function BoardPage() {
-  const { nodes, addSticker } = useNodes();
-  const viewModelLast = useViewStateModel();
+  const nodesModel = useNodes();
+  const viewStateModel = useViewState();
   const focusLayoutRef = useLayoutFocus();
   const { canvasRef, canvasRect } = useCanvasRect();
+
+  const viewModel = useViewModel({
+    viewStateModel,
+    nodesModel,
+    canvasRect,
+  });
 
   return (
     <Layout ref={focusLayoutRef} onKeyDown={viewModel.layot?.onKeyDown}>
