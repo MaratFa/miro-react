@@ -1,5 +1,6 @@
 import { IdleViewState } from "../../model/view-state";
-import { ViewModel, ViewModelParams } from "../use-view-model";
+import { ViewModelParams } from "../view-model-params";
+import { ViewModel } from "../view-model-type";
 
 export function useIdleViewModel({
   nodesModel,

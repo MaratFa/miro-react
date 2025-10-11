@@ -1,4 +1,5 @@
-import { ViewModel, ViewModelParams } from "../use-view-model";
+import { ViewModelParams } from "../view-model-params";
+import { ViewModel } from "../view-model-type";
 
 export function useAddStickerViewModel({
   nodesModel,
@@ -23,6 +24,12 @@ export function useAddStickerViewModel({
           y: e.clientY - canvasRect.y,
         });
         viewStateModel.goToIdle();
+      },
+    },
+    actions: {
+      addSticker: {
+        isActive: true,
+        onClick: () => viewStateModel.goToIdle(),
       },
     },
   });

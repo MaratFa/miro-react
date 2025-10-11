@@ -1,44 +1,7 @@
-import { ViewStateModel } from "../model/view-state";
-import { CanvasRect } from "../hooks/use-canvas-rect";
-import { NodesModel } from "../model/nodes";
 import { useAddStickerViewModel } from "./variants/add-sticker";
 import { useIdleViewModel } from "./variants/idle";
-
-type ViewModeNode = {
-  id: string;
-  text: string;
-  x: number;
-  y: number;
-  isSelected?: boolean;
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-};
-
-export type ViewModel = {
-  nodes: ViewModeNode[];
-  layot?: {
-    onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
-  };
-  canvas?: {
-    onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
-  };
-  overlay?: {
-    onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
-    onMouseDown?: (e: React.MouseEvent<HTMLDivElement>) => void;
-    onMouseUp?: (e: React.MouseEvent<HTMLDivElement>) => void;
-  };
-  actions?: {
-    addSticker?: {
-      onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-      isActive?: boolean;
-    };
-  };
-};
-
-export type ViewModelParams = {
-  viewStateModel: ViewStateModel;
-  nodesModel: NodesModel;
-  canvasRect: CanvasRect | undefined;
-};
+import { ViewModelParams } from "./view-model-params";
+import { ViewModel } from "./view-model-type";
 
 export function useViewModel(params: ViewModelParams) {
   const addStickerViewModel = useAddStickerViewModel(params);
