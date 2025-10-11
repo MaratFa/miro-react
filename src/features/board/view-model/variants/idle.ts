@@ -24,6 +24,11 @@ export function useIdleViewModel({
         }
       },
     },
+    overlay: {
+      onClick: () => {
+        viewStateModel.selection([], "replace");
+      },
+    },
     actions: {
       addSticker: {
         isActive: false,
