@@ -2,12 +2,15 @@ import { ArrowRightIcon, StickerIcon } from "lucide-react";
 import { Button } from "@/shared/ui/kit/button";
 import { useNodes } from "./model/nodes";
 import { useViewState } from "./model/view-state";
-import { Ref } from "react";
+import { Ref, useEffect, useLayoutEffect, useRef } from "react";
 import { useCanvasRect } from "./hooks/use-canvas-rect";
 import { useLayoutFocus } from "./hooks/use-layout-focus";
 import clsx from "clsx";
 import { useViewModel } from "./view-model/use-view-model";
 import { Rect } from "./domain/rect";
+import { ViewModel } from "./view-model/view-model-type";
+
+
 
 function BoardPage() {
   const nodesModel = useNodes();
@@ -20,6 +23,8 @@ function BoardPage() {
     nodesModel,
     canvasRect,
   });
+
+  
 
   return (
     <Layout ref={focusLayoutRef} onKeyDown={viewModel.layot?.onKeyDown}>
