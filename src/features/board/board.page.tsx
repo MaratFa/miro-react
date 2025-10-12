@@ -7,6 +7,7 @@ import { useCanvasRect } from "./hooks/use-canvas-rect";
 import { useLayoutFocus } from "./hooks/use-layout-focus";
 import clsx from "clsx";
 import { useViewModel } from "./view-model/use-view-model";
+import { Rect } from "./domain/rect";
 
 function BoardPage() {
   const nodesModel = useNodes();
@@ -57,6 +58,15 @@ function BoardPage() {
 }
 
 export const Component = BoardPage;
+
+function SelectionWindow({height, width, x, y}: Rect){
+  return (
+    <div
+      className="absolute inset-0"
+      style={{ transform: `translate(${x}px, ${y}px)`}}
+    ></div>
+  )
+}
 
 function Overlay({
   onClick,
