@@ -42,6 +42,9 @@ function BoardPage() {
           />
         ))}
       </Canvas>
+      {viewModel.selectionWindow && (
+        <SelectionWindow {...viewModel.selectionWindow} />
+      )}
       <Actions>
         <ActionButton
           isActive={viewModel.actions?.addSticker?.isActive}
@@ -59,13 +62,17 @@ function BoardPage() {
 
 export const Component = BoardPage;
 
-function SelectionWindow({height, width, x, y}: Rect){
+function SelectionWindow({ height, width, x, y }: Rect) {
   return (
     <div
-      className="absolute inset-0"
-      style={{ transform: `translate(${x}px, ${y}px)`}}
+      className="absolute inset-0 bg-blue-500/30 border-2 border-blue-500"
+      style={{
+        transform: `translate(${x}px, ${y}px)`,
+        width: width,
+        height: height,
+      }}
     ></div>
-  )
+  );
 }
 
 function Overlay({
