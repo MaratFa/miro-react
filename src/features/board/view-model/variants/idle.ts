@@ -29,7 +29,17 @@ export function useIdleViewModel({
       onClick: () => {
         viewStateModel.selection([], "replace");
       },
-      onMouseDown: (e) => {},
+      onMouseDown: (e) => {
+        console.log("onMouseDown", e);
+      },
+    },
+    window: {
+      onMouseMove: (e) => {
+        console.log("onMouseMove", e);
+      },
+      onMouseUp: (e) => {
+        console.log("onMouseUp", e);
+      }
     },
     actions: {
       addSticker: {
@@ -39,5 +49,5 @@ export function useIdleViewModel({
         },
       },
     },
-  })
+  });
 }

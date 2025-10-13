@@ -1,3 +1,6 @@
+import { useEffect, useLayoutEffect, useRef } from "react";
+import { ViewModel } from "../view-model/view-model-type";
+
 export function useWindowEvents(viewModel: ViewModel) {
   const viewModelRef = useRef(viewModel);
 
@@ -10,13 +13,13 @@ export function useWindowEvents(viewModel: ViewModel) {
       viewModelRef.current.window?.onMouseMove?.(e);
     };
     const onMouseUp = (e: MouseEvent) => {
-      viewModelRef.current.window?.onMouseMove?.(e);
+      viewModelRef.current.window?.onMouseUp?.(e);
     };
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseup", onMouseUp);
     return () => {
-      window.addEventListener("mousemove", onMouseMove);
-      window.addEventListener("mouseup", onMouseUp);
-    };    
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+    };
   }, [viewModelRef]);
 }
