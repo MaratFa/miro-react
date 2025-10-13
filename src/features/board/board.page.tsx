@@ -2,15 +2,14 @@ import { ArrowRightIcon, StickerIcon } from "lucide-react";
 import { Button } from "@/shared/ui/kit/button";
 import { useNodes } from "./model/nodes";
 import { useViewState } from "./model/view-state";
-import { Ref, useEffect, useLayoutEffect, useRef } from "react";
+import React, { Ref } from "react";
 import { useCanvasRect } from "./hooks/use-canvas-rect";
 import { useLayoutFocus } from "./hooks/use-layout-focus";
 import clsx from "clsx";
 import { useViewModel } from "./view-model/use-view-model";
 import { Rect } from "./domain/rect";
-import { ViewModel } from "./view-model/view-model-type";
 
-
+import { useWindowEvents } from "./hooks/use-window-events";
 
 function BoardPage() {
   const nodesModel = useNodes();
@@ -24,7 +23,7 @@ function BoardPage() {
     canvasRect,
   });
 
-  
+  useWindowEvents(viewModel);
 
   return (
     <Layout ref={focusLayoutRef} onKeyDown={viewModel.layot?.onKeyDown}>
@@ -57,7 +56,7 @@ function BoardPage() {
         >
           <StickerIcon />
         </ActionButton>
-        <ActionButton isActive={false} onClick={() => {}}>
+        <ActionButton isActive={false} onClick={() => { }}>
           <ArrowRightIcon />
         </ActionButton>
       </Actions>
