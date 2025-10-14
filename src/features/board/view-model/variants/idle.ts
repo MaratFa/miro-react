@@ -1,6 +1,14 @@
-import { IdleViewState } from "../../model/view-state";
 import { ViewModelParams } from "../view-model-params";
 import { ViewModel } from "../view-model-type";
+
+export type IdleViewState = {
+  type: "idle";
+  selectedIds: Set<string>;
+  mouseDown?: {
+    x: number;
+    y: number;
+  };
+};
 
 export function useIdleViewModel({
   nodesModel,
