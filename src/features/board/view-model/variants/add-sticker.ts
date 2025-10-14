@@ -1,6 +1,10 @@
 import { ViewModelParams } from "../view-model-params";
 import { ViewModel } from "../view-model-type";
 
+export type AddStickerViewState = {
+  type: "add-sticker";
+};
+
 export function useAddStickerViewModel({
   nodesModel,
   viewStateModel,
