@@ -1,7 +1,6 @@
 import { ArrowRightIcon, StickerIcon } from "lucide-react";
 import { Button } from "@/shared/ui/kit/button";
 import { useNodes } from "./model/nodes";
-import { useViewState } from "./model/view-state";
 import React, { Ref } from "react";
 import { useCanvasRect } from "./hooks/use-canvas-rect";
 import { useLayoutFocus } from "./hooks/use-layout-focus";
@@ -13,12 +12,10 @@ import { useWindowEvents } from "./hooks/use-window-events";
 
 function BoardPage() {
   const nodesModel = useNodes();
-  const viewStateModel = useViewState();
   const focusLayoutRef = useLayoutFocus();
   const { canvasRef, canvasRect } = useCanvasRect();
 
   const viewModel = useViewModel({
-    viewStateModel,
     nodesModel,
     canvasRect,
   });
