@@ -4,6 +4,7 @@ import { CanvasRect } from "../../hooks/use-canvas-rect";
 import { ViewModelParams } from "../view-model-params";
 import { ViewModel } from "../view-model-type";
 import { goToAddSticker } from "./add-sticker";
+import { goToSelectionWindow } from "./selection-window";
 
 export type IdleViewState = {
   type: "idle";
@@ -73,7 +74,9 @@ export function useIdleViewModel({
           };
 
           if (distanceFromPoints(idleState.mouseDown, currentPoint) > 5) {
-            console.log("mouse moved");
+            setViewState(
+              goToSelectionWindow(idleState.mouseDown, currentPoint)
+            );
           }
         }
       },
@@ -101,6 +104,19 @@ export function goToIdle(): IdleViewState {
     selectedIds: new Set(),
   };
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export function pointOnScreenToCanvas(
   point: { x: number; y: number },
