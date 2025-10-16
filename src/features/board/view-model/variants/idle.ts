@@ -1,6 +1,6 @@
 import { distanceFromPoints } from "../../domain/points";
+import { pointOnScreenToCanvas } from "../../domain/screen-to-canvas";
 import { SelectionModifier, selectItems } from "../../domain/selection";
-import { CanvasRect } from "../../hooks/use-canvas-rect";
 import { ViewModelParams } from "../view-model-params";
 import { ViewModel } from "../view-model-type";
 import { goToAddSticker } from "./add-sticker";
@@ -55,23 +55,28 @@ export function useIdleViewModel({
         select(idleState, [], "replace");
       },
       onMouseDown: (e) => {
-        if (!canvasRect) return;
         setViewState({
           ...idleState,
-          mouseDown: {
-            x: e.clientX,
-            y: e.clientY,
-          },
+          mouseDown: pointOnScreenToCanvas(
+            {
+              x: e.clientX,
+              y: e.clientY,
+            },
+            canvasRect
+          ),
         });
       },
     },
     window: {
       onMouseMove: (e) => {
         if (idleState.mouseDown) {
-          const currentPoint = {
-            x: e.clientX,
-            y: e.clientY,
-          };
+          const currentPoint = pointOnScreenToCanvas(
+            {
+              x: e.clientX,
+              y: e.clientY,
+            },
+            canvasRect
+          );
 
           if (distanceFromPoints(idleState.mouseDown, currentPoint) > 5) {
             setViewState(
@@ -103,25 +108,4 @@ export function goToIdle(): IdleViewState {
     type: "idle",
     selectedIds: new Set(),
   };
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-export function pointOnScreenToCanvas(
-  point: { x: number; y: number },
-  canvasRect?: CanvasRect
-) {
-  if (!canvasRect) return point;
-  return { x: point.x - canvasRect.x, y: point.y - canvasRect.y };
 }
