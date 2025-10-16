@@ -5,6 +5,7 @@ import { ViewModelParams } from "../view-model-params";
 import { ViewModel } from "../view-model-type";
 import { goToAddSticker } from "./add-sticker";
 import { goToSelectionWindow } from "./selection-window";
+import { Selection } from "../../domain/selection";
 
 export type IdleViewState = {
   type: "idle";
@@ -103,9 +104,11 @@ export function useIdleViewModel({
   });
 }
 
-export function goToIdle(): IdleViewState {
+export function goToIdle({
+  selectedIds,
+}: { selectedIds?: Selection } = {}): IdleViewState {
   return {
     type: "idle",
-    selectedIds: new Set(),
+    selectedIds: selectedIds ?? new Set(),
   };
 }
