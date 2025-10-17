@@ -10,6 +10,7 @@ export type SelectionWindowViewState = {
   type: "selection-window";
   startPoint: Point;
   endPoint: Point;
+  initialSelectedIds: Set<string>;
 };
 
 export function useSelectionWindowWiewModel({
@@ -44,9 +45,15 @@ export function useSelectionWindowWiewModel({
             .filter((node) => isPointInRect(node, rect))
             .map((node) => node.id);
 
+          console.log(nodesIdsInRect);
+
           setViewState(
             goToIdle({
-              selectedIds: selectItems(new Set(), nodesIdsInRect, "replace"),
+              selectedIds: selectItems(
+                state.initialSelectedIds,
+                nodesIdsInRect,
+                "add"
+              ),
             })
           );
         },
@@ -55,13 +62,19 @@ export function useSelectionWindowWiewModel({
   };
 }
 
-export function goToSelectionWindow(
-  startPoint: { x: number; y: number },
-  endPoint: { x: number; y: number }
-): SelectionWindowViewState {
+export function goToSelectionWindow({
+  endPoint,
+  startPoint,
+  initialSelectedIds,
+}: {
+  startPoint: { x: number; y: number };
+  endPoint: { x: number; y: number };
+  initialSelectedIds?: Set<string>;
+}): SelectionWindowViewState {
   return {
     type: "selection-window",
     startPoint,
     endPoint,
+    initialSelectedIds: initialSelectedIds ?? new Set(),
   };
 }
