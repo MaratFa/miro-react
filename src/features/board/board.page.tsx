@@ -53,7 +53,7 @@ function BoardPage() {
         >
           <StickerIcon />
         </ActionButton>
-        <ActionButton isActive={false} onClick={() => { }}>
+        <ActionButton isActive={false} onClick={() => {}}>
           <ArrowRightIcon />
         </ActionButton>
       </Actions>
