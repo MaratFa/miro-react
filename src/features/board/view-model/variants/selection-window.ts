@@ -24,7 +24,8 @@ export function useSelectionWindowWiewModel({
       selectionWindow: rect,
       nodes: nodesModel.nodes.map((node) => ({
         ...node,
-        isSelected: isPointInRect(node, rect),
+        isSelected:
+          isPointInRect(node, rect) || state.initialSelectedIds.has(node.id),
       })),
       window: {
         onMouseMove: (e) => {

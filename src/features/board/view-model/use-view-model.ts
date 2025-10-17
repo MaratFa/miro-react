@@ -3,7 +3,7 @@ import {
   AddStickerViewState,
   useAddStickerViewModel,
 } from "./variants/add-sticker";
-import { IdleViewState, useIdleViewModel } from "./variants/idle";
+import { goToIdle, IdleViewState, useIdleViewModel } from "./variants/idle";
 import { ViewModelParams } from "./view-model-params";
 import { ViewModel } from "./view-model-type";
 import {
@@ -17,10 +17,7 @@ export type ViewState =
   | SelectionWindowViewState;
 
 export function useViewModel(params: Omit<ViewModelParams, "setViewState">) {
-  const [viewState, setViewState] = useState<ViewState>({
-    type: "idle",
-    selectedIds: new Set(),
-  });
+  const [viewState, setViewState] = useState<ViewState>(() => goToIdle());
 
   const newParams = {
     ...params,
