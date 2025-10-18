@@ -1,19 +1,17 @@
 import { ArrowRightIcon, StickerIcon } from "lucide-react";
-import { Button } from "@/shared/ui/kit/button";
 import { useNodes } from "./model/nodes";
-import React from "react";
 import { useCanvasRect } from "./hooks/use-canvas-rect";
 import { useLayoutFocus } from "./hooks/use-layout-focus";
 import { useViewModel } from "./view-model/use-view-model";
-
 import { useWindowEvents } from "./hooks/use-window-events";
-import { SelectionWindow } from "./ui/SelectionWindow";
-import { Overlay } from "./ui/Overlay";
-import { Layout } from "./ui/Layout";
-import { Dots } from "./ui/Dots";
-import { Canvas } from "./ui/Canvas";
-import { Sticker } from "./ui/Sticker";
-import { Actions } from "./ui/Actions";
+import { SelectionWindow } from "./ui/selectionWindow";
+import { Overlay } from "./ui/overlay";
+import { Layout } from "./ui/layout";
+import { Dots } from "./ui/dots";
+import { Canvas } from "./ui/canvas";
+import { Sticker } from "./ui/sticker";
+import { Actions } from "./ui/actions";
+import { ActionButton } from "./ui/action-button";
 
 function BoardPage() {
   const nodesModel = useNodes();
@@ -67,28 +65,3 @@ function BoardPage() {
 }
 
 export const Component = BoardPage;
-
-function ActionButton({
-  children,
-  isActive,
-  onClick,
-}: {
-  children: React.ReactNode;
-  isActive?: boolean;
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-}) {
-  return (
-    <Button
-      variant="ghost"
-      size="icon"
-      className={
-        isActive
-          ? "bg-blue-500/30 hover:bg-blue-600/30 text-blue-500 hover:text-blue-60000"
-          : ""
-      }
-      onClick={onClick}
-    >
-      {children}
-    </Button>
-  );
-}
