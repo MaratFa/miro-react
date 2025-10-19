@@ -12,11 +12,13 @@ import { Canvas } from "./ui/canvas";
 import { Sticker } from "./ui/sticker";
 import { Actions } from "./ui/actions";
 import { ActionButton } from "./ui/action-button";
+import { useNodesRects } from "./hooks/use-nodes-rects";
 
 function BoardPage() {
   const nodesModel = useNodes();
   const focusLayoutRef = useLayoutFocus();
   const { canvasRef, canvasRect } = useCanvasRect();
+  const { nodeRef } = useNodesRects();
 
   const viewModel = useViewModel({
     nodesModel,
@@ -43,6 +45,7 @@ function BoardPage() {
             y={node.y}
             selected={node.isSelected}
             onClick={node.onClick}
+            ref={nodeRef}
           />
         ))}
       </Canvas>
