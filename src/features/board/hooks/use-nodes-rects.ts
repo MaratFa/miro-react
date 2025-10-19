@@ -1,4 +1,4 @@
-import { RefCallback, useCallback, useState } from "react";
+import { RefCallback, useCallback, useEffect, useRef, useState } from "react";
 
 export type NodeRect = {
   width: number;
@@ -7,35 +7,40 @@ export type NodeRect = {
 
 export type NodesRectsMap = Record<string, NodeRect>;
 
-export const useNodesRect = () => {
+export const useNodesRects = () => {
   const [nodesRects, setNodesRects] = useState<NodesRectsMap>({});
 
   const resizeObserverRef = useRef<ResizeObserver | undefined>(undefined);
 
-  const nodeRef: RefCallback<HTMLElement> = useCallback((el) => {
+  const nodeRef: RefCallback<Element> = useCallback((el) => {
     if (!resizeObserverRef.current) {
       resizeObserverRef.current = new ResizeObserver((entries) => {
+        console.log(entries);
+
         for (const entry of entries) {
           const { width, height } = entry.contentRect;
         }
       });
     }
 
+    const resizeObserver = resizeObserverRef.current;
 
-    
-
-
-
-
-
-
-
-
-
+    if (el) {
+      resizeObserver.observe(el);
+      return () => {
+        resizeObserver.unobserve(el);
+      };
+    }
   }, []);
 
+  useEffect(() => () => {
+    if (resizeObserverRef.current) {
+      resizeObserverRef.current.disconnect();
+    }
+  });
+
   return {
-    canvasRef,
-    canvasRect,
+    nodeRef,
+    nodesRects,
   };
 };
