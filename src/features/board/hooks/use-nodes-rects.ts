@@ -15,11 +15,19 @@ export const useNodesRects = () => {
   const nodeRef: RefCallback<Element> = useCallback((el) => {
     if (!resizeObserverRef.current) {
       resizeObserverRef.current = new ResizeObserver((entries) => {
-        console.log(entries);
+        const nodesToUpdate = Object.fromEntries(
+          entries
+            .map((entry) => [
+              (entry.target as HTMLElement).dataset.id,
+              {
+                width: entry.contentRect.width,
+                height: entry.contentRect.height,
+              },
+            ])
+            .filter((entry) => !!entry[0])
+        );
 
-        for (const entry of entries) {
-          const { width, height } = entry.contentRect;
-        }
+        console.log(nodesToUpdate);
       });
     }
 
@@ -33,11 +41,14 @@ export const useNodesRects = () => {
     }
   }, []);
 
-  useEffect(() => () => {
-    if (resizeObserverRef.current) {
-      resizeObserverRef.current.disconnect();
-    }
-  });
+  useEffect(
+    () => () => {
+      if (resizeObserverRef.current) {
+        resizeObserverRef.current.disconnect();
+      }
+    },
+    []
+  );
 
   return {
     nodeRef,
