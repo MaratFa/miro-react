@@ -39,6 +39,7 @@ function BoardPage() {
         />
         {viewModel.nodes.map((node) => (
           <Sticker
+            id={node.id}
             key={node.id}
             text={node.text}
             x={node.x}
