@@ -1,9 +1,17 @@
 import clsx from "clsx";
-import React from "react";
+import React, { Ref } from "react";
 
 export function Sticker({
-  text, x, y, onClick, selected,
+  id,
+  text,
+  x,
+  y,
+  onClick,
+  ref,
+  selected,
 }: {
+  id: string;
+  ref: Ref<HTMLButtonElement>;
   text: string;
   x: number;
   y: number;
@@ -12,6 +20,8 @@ export function Sticker({
 }) {
   return (
     <button
+      data-id={id}
+      ref={ref}
       className={clsx(
         "absolute bg-yellow-300 px-2 py-4 rounded-xs shadow-md",
         selected && "outline outline-blue-500"
