@@ -27,18 +27,10 @@ export const useNodesRects = () => {
             .filter((entry) => !!entry[0])
         );
 
-        
-
-
-        
-
-
-
-
-
-
-
-
+        setNodesRects((prev) => ({
+          ...prev,
+          ...nodesToUpdate,
+        }));
       });
     }
 
@@ -60,6 +52,8 @@ export const useNodesRects = () => {
     },
     []
   );
+
+  console.log(nodesRects);
 
   return {
     nodeRef,
