@@ -27,7 +27,18 @@ export const useNodesRects = () => {
             .filter((entry) => !!entry[0])
         );
 
-        console.log(nodesToUpdate);
+        
+
+
+        
+
+
+
+
+
+
+
+
       });
     }
 
