@@ -7,6 +7,18 @@ export type Rect = {
   height: number;
 };
 
+export function createRectFromDimensions(
+  start: Point,
+  dimensions: { width: number; height: number }
+): Rect {
+  return {
+    x: start.x,
+    y: start.y,
+    width: dimensions.width,
+    height: dimensions.height,
+  };
+}
+
 export function createRectFromPoints(start: Point, end: Point): Rect {
   return {
     x: Math.min(start.x, end.x),
