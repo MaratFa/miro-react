@@ -12,18 +12,18 @@ import { Canvas } from "./ui/canvas";
 import { Sticker } from "./ui/sticker";
 import { Actions } from "./ui/actions";
 import { ActionButton } from "./ui/action-button";
-import { useNodesRects } from "./hooks/use-nodes-rects";
+import { useNodesDimensions } from "./hooks/use-nodes-dimensions";
 
 function BoardPage() {
   const nodesModel = useNodes();
   const focusLayoutRef = useLayoutFocus();
   const { canvasRef, canvasRect } = useCanvasRect();
-  const { nodeRef, nodesRects } = useNodesRects();
+  const { nodeRef, nodesDimensions } = useNodesDimensions();
 
   const viewModel = useViewModel({
     nodesModel,
     canvasRect,
-    nodesRects,
+    nodesDimensions,
   });
 
   useWindowEvents(viewModel);
