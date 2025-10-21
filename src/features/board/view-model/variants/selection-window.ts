@@ -1,5 +1,5 @@
 import { Point } from "../../domain/points";
-import { createRectFromPoints, isPointInRect } from "../../domain/rect";
+import { createRectFromPoints, isPointInRect, Rect } from "../../domain/rect";
 import { pointOnScreenToCanvas } from "../../domain/screen-to-canvas";
 import { selectItems } from "../../domain/selection";
 import { ViewModelParams } from "../view-model-params";
@@ -17,16 +17,23 @@ export function useSelectionWindowWiewModel({
   nodesModel,
   setViewState,
   canvasRect,
+  nodesRects,
 }: ViewModelParams) {
+  const getNodes = (state: SelectionWindowViewState, selectionRect: Rect) =>
+    nodesModel.nodes.map((node) => {
+      return {
+        ...node,
+        isSelected:
+          isPointInRect(node, selectionRect) ||
+          state.initialSelectedIds.has(node.id),
+      };
+    });
+
   return (state: SelectionWindowViewState): ViewModel => {
     const rect = createRectFromPoints(state.startPoint, state.endPoint);
     return {
       selectionWindow: rect,
-      nodes: nodesModel.nodes.map((node) => ({
-        ...node,
-        isSelected:
-          isPointInRect(node, rect) || state.initialSelectedIds.has(node.id),
-      })),
+      nodes: getNodes(state, rect),
       window: {
         onMouseMove: (e) => {
           const currentPoint = pointOnScreenToCanvas(
