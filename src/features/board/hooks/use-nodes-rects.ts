@@ -39,6 +39,11 @@ export const useNodesRects = () => {
     if (el) {
       resizeObserver.observe(el);
       return () => {
+        setNodesRects((prev) => {
+          const newNodesRects = { ...prev };
+          delete newNodesRects[(el as HTMLElement).dataset.id ?? ""];
+          return newNodesRects;
+        });
         resizeObserver.unobserve(el);
       };
     }
@@ -52,8 +57,6 @@ export const useNodesRects = () => {
     },
     []
   );
-
-  console.log(nodesRects);
 
   return {
     nodeRef,
