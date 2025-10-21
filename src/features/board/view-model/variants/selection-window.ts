@@ -1,5 +1,9 @@
 import { Point } from "../../domain/points";
-import { createRectFromPoints, isPointInRect, Rect } from "../../domain/rect";
+import {
+  createRectFromPoints,
+  isRectsIntersecting,
+  Rect,
+} from "../../domain/rect";
 import { pointOnScreenToCanvas } from "../../domain/screen-to-canvas";
 import { selectItems } from "../../domain/selection";
 import { ViewModelParams } from "../view-model-params";
@@ -17,23 +21,34 @@ export function useSelectionWindowWiewModel({
   nodesModel,
   setViewState,
   canvasRect,
-  nodesRects,
+  nodesDimensions,
 }: ViewModelParams) {
   const getNodes = (state: SelectionWindowViewState, selectionRect: Rect) =>
     nodesModel.nodes.map((node) => {
+      const nodeDimensions = nodesDimensions[node.id];
+
+      const nodeRect = {
+        x: node.x,
+        y: node.y,
+        width: nodeDimensions.width,
+        height: nodeDimensions.height,
+      };
+
       return {
         ...node,
         isSelected:
-          isPointInRect(node, selectionRect) ||
+          isRectsIntersecting(nodeRect, selectionRect) ||
           state.initialSelectedIds.has(node.id),
       };
     });
 
   return (state: SelectionWindowViewState): ViewModel => {
     const rect = createRectFromPoints(state.startPoint, state.endPoint);
+    const nodes = getNodes(state, rect);
+    
     return {
       selectionWindow: rect,
-      nodes: getNodes(state, rect),
+      nodes,
       window: {
         onMouseMove: (e) => {
           const currentPoint = pointOnScreenToCanvas(
@@ -49,8 +64,8 @@ export function useSelectionWindowWiewModel({
           });
         },
         onMouseUp: () => {
-          const nodesIdsInRect = nodesModel.nodes
-            .filter((node) => isPointInRect(node, rect))
+          const nodesIdsInRect = nodes
+            .filter((node) => node.isSelected)
             .map((node) => node.id);
 
           console.log(nodesIdsInRect);
