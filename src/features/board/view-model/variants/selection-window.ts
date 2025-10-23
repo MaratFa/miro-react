@@ -1,5 +1,6 @@
 import { Point } from "../../domain/points";
 import {
+  createRectFromDimensions,
   createRectFromPoints,
   isRectsIntersecting,
   Rect,
@@ -26,13 +27,7 @@ export function useSelectionWindowWiewModel({
   const getNodes = (state: SelectionWindowViewState, selectionRect: Rect) =>
     nodesModel.nodes.map((node) => {
       const nodeDimensions = nodesDimensions[node.id];
-
-      const nodeRect = {
-        x: node.x,
-        y: node.y,
-        width: nodeDimensions.width,
-        height: nodeDimensions.height,
-      };
+      const nodeRect = createRectFromDimensions(node, nodeDimensions);
 
       return {
         ...node,
@@ -45,7 +40,7 @@ export function useSelectionWindowWiewModel({
   return (state: SelectionWindowViewState): ViewModel => {
     const rect = createRectFromPoints(state.startPoint, state.endPoint);
     const nodes = getNodes(state, rect);
-    
+
     return {
       selectionWindow: rect,
       nodes,
