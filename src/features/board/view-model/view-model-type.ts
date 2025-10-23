@@ -7,6 +7,7 @@ type ViewModeNode = {
   y: number;
   isSelected?: boolean;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  isEditing?: boolean;
 };
 
 export type ViewModel = {
