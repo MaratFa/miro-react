@@ -43,6 +43,12 @@ export function useNodes() {
     ]);
   };
 
+  const updateStickerText = (id: string, text: string) => {
+    setNodes((lastNodes) =>
+      lastNodes.map((node) => (node.id === id ? { ...node, text } : node))
+    );
+  };
+
   const deleteNodes = (ids: string[]) => {
     setNodes((lastNodes) => lastNodes.filter((node) => !ids.includes(node.id)));
   };
