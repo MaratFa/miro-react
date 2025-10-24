@@ -5,12 +5,12 @@ import { goToIdle } from "./idle";
 export type EditStickerViewState = {
   type: "edit-sticker";
   stickerId: string;
+  newText?: string;
 };
 
 export function useEditStickerViewModel({
   nodesModel,
   setViewState,
-  canvasRect,
 }: ViewModelParams) {
   return (viewState: EditStickerViewState): ViewModel => ({
     nodes: nodesModel.nodes.map((node) => {
@@ -18,6 +18,14 @@ export function useEditStickerViewModel({
         return {
           ...node,
           isSelected: true,
+          isEditing: true,
+          text: viewState.newText ?? node.text,
+          onTextChange: (text) => {
+            setViewState({
+              ...viewState,
+              newText: text,
+            });
+          },
         };
       }
 
@@ -26,6 +34,9 @@ export function useEditStickerViewModel({
     layot: {
       onKeyDown: (e) => {
         if (e.key === "Escape") {
+          setViewState(goToIdle());
+        }
+        if (e.key === "Enter") {
           setViewState(goToIdle());
         }
       },
