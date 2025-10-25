@@ -57,13 +57,6 @@ export function useNodes() {
     nodes,
     addSticker,
     updateStickerText,
-
-
-
-
-
-
-    
     deleteNodes,
   };
 }
