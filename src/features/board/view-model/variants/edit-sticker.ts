@@ -40,7 +40,7 @@ export function useEditStickerViewModel({
           if (viewState.newText) {
             nodesModel.updateStickerText(
               viewState.stickerId,
-              viewState.newText,
+              viewState.newText
             );
             setViewState(goToIdle());
           }
@@ -48,7 +48,12 @@ export function useEditStickerViewModel({
       },
     },
     overlay: {
-      onClick: () => setViewState(goToIdle()),
+      onClick: () => {
+        if (viewState.newText) {
+          nodesModel.updateStickerText(viewState.stickerId, viewState.newText);
+          setViewState(goToIdle());
+        }
+      },
     },
   });
 }
