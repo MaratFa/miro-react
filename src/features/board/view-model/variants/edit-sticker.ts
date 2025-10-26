@@ -37,6 +37,14 @@ export function useEditStickerViewModel({
           setViewState(goToIdle());
         }
         if (e.key === "Enter") {
+
+
+
+
+
+          
+
+          
           if (viewState.newText) {
             nodesModel.updateStickerText(
               viewState.stickerId,
@@ -44,6 +52,14 @@ export function useEditStickerViewModel({
             );
             setViewState(goToIdle());
           }
+
+
+
+
+
+
+
+
         }
       },
     },
