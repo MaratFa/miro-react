@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React, { Ref } from "react";
+import React, { Ref, useLayoutEffect, useRef, useState } from "react";
 
 export function Sticker({
   id,
@@ -34,15 +34,50 @@ export function Sticker({
       onClick={onClick}
     >
       {isEditing ? (
-        <input
+        <TextareaAutoSize
           value={text}
-          className="w-full h-full"
-          autoFocus
-          onChange={(e) => onTextChange?.(e.target.value)}
+          onChange={(value) => onTextChange?.(value)}
         />
       ) : (
         text
       )}
     </button>
+  );
+}
+
+function TextareaAutoSize({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [height, setHeight] = useState(0);
+  const [width, setWidth] = useState(0);
+
+  useLayoutEffect(() => {
+    if (!ref.current) return;
+
+    const { scrollWidth, clientHeight } = ref.current;
+    setHeight(clientHeight);
+    setWidth(scrollWidth);
+  }, [value]);
+
+  return (
+    <div className="relative">
+      <div ref={ref} className="whitespace-pre-wrap opacity-0 ">
+        {value}
+      </div>
+      <textarea
+        className="absolute left-0 top-0 resize-none overflow-hidden"
+        value={value}
+        onChange={(e) => onChange?.(e.target.value)}
+        style={{
+          width: width + 2,
+          height: height + 2,
+        }}
+      />
+    </div>
   );
 }
