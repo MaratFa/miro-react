@@ -33,14 +33,11 @@ export function Sticker({
       style={{ transform: `translate(${x}px, ${y}px)` }}
       onClick={onClick}
     >
-      {isEditing ? (
-        <TextareaAutoSize
-          value={text}
-          onChange={(value) => onTextChange?.(value)}
-        />
-      ) : (
-        text
-      )}
+      <TextareaAutoSize
+        isEditing={isEditing ?? false}
+        value={text}
+        onChange={(value) => onTextChange?.(value)}
+      />
     </button>
   );
 }
@@ -48,7 +45,9 @@ export function Sticker({
 function TextareaAutoSize({
   value,
   onChange,
+  isEditing,
 }: {
+  isEditing: boolean;
   value: string;
   onChange: (value: string) => void;
 }) {
@@ -66,18 +65,34 @@ function TextareaAutoSize({
 
   return (
     <div className="relative">
-      <div ref={ref} className="whitespace-pre-wrap opacity-0 ">
+      <div
+        ref={ref}
+        className={clsx("whitespace-pre-wrap ", isEditing && "opacity-0 ")}
+      >
         {value}
       </div>
-      <textarea
-        className="absolute left-0 top-0 resize-none overflow-hidden"
-        value={value}
-        onChange={(e) => onChange?.(e.target.value)}
-        style={{
-          width: width + 2,
-          height: height + 2,
-        }}
-      />
+      {isEditing && (
+        <textarea
+          className="absolute left-0 top-0 resize-none overflow-hidden focus:"
+          value={value}
+
+
+
+
+
+          
+
+
+
+
+
+          onChange={(e) => onChange?.(e.target.value)}
+          style={{
+            width: width + 2,
+            height: height + 2,
+          }}
+        />
+      )}
     </div>
   );
 }
