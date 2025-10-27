@@ -34,33 +34,16 @@ export function useEditStickerViewModel({
     layot: {
       onKeyDown: (e) => {
         if (e.key === "Escape") {
-          setViewState(goToIdle());
-        }
-        if (e.key === "Enter") {
 
-
-
-
-
-          
-
-          
           if (viewState.newText) {
             nodesModel.updateStickerText(
               viewState.stickerId,
-              viewState.newText
+              viewState.newText,
             );
-            setViewState(goToIdle());
           }
-
-
-
-
-
-
-
-
+          setViewState(goToIdle());
         }
+        
       },
     },
     overlay: {
