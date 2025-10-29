@@ -76,6 +76,15 @@ function TextareaAutoSize({
           className="absolute left-0 top-0 resize-none overflow-hidden focus:"
           value={value}
           autoFocus
+
+
+
+
+
+
+
+
+          
           onChange={(e) => onChange?.(e.target.value)}
           style={{
             width: width + 2,
