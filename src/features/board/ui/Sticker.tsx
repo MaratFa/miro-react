@@ -27,7 +27,7 @@ export function Sticker({
       data-id={id}
       ref={ref}
       className={clsx(
-        "absolute bg-yellow-300 px-2 py-4 rounded-xs shadow-md",
+        "absolute bg-yellow-300 px-2 py-4 rounded-xs shadow-md text-left",
         isSelected && "outline outline-blue-500"
       )}
       style={{ transform: `translate(${x}px, ${y}px)` }}
