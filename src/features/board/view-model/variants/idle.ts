@@ -22,16 +22,6 @@ export function useIdleViewModel({
   setViewState,
   canvasRect,
 }: ViewModelParams) {
-  const select = (
-    lastState: IdleViewState,
-    ids: string[],
-    modif: SelectionModifier
-  ) => {
-    setViewState({
-      ...lastState,
-      selectedIds: selectItems(lastState.selectedIds, ids, modif),
-    });
-  };
 
   const deleteSelected = (viewState: IdleViewState) => {
     if (viewState.selectedIds.size > 0) {
@@ -149,12 +139,18 @@ export function useIdleViewModel({
   });
 }
 
-
-
-
-
-
-
+function useSelection() {
+    const select = (
+    lastState: IdleViewState,
+    ids: string[],
+    modif: SelectionModifier
+  ) => {
+    setViewState({
+      ...lastState,
+      selectedIds: selectItems(lastState.selectedIds, ids, modif),
+    });
+  };
+}
 
 export function goToIdle({
   selectedIds,
