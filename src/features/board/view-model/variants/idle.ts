@@ -22,7 +22,6 @@ export function useIdleViewModel({
   setViewState,
   canvasRect,
 }: ViewModelParams) {
-
   const deleteSelected = (viewState: IdleViewState) => {
     if (viewState.selectedIds.size > 0) {
       const ids = Array.from(viewState.selectedIds);
@@ -140,7 +139,7 @@ export function useIdleViewModel({
 }
 
 function useSelection() {
-    const select = (
+  const select = (
     lastState: IdleViewState,
     ids: string[],
     modif: SelectionModifier
@@ -160,5 +159,3 @@ export function goToIdle({
     selectedIds: selectedIds ?? new Set(),
   };
 }
-
-
