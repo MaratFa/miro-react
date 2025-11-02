@@ -138,6 +138,35 @@ export function useIdleViewModel({
   });
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 3:23:49 video "Копия Miro на чистом React | Без стейт менеджеров! Часть 2"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function useSelection() {
   const select = (
     lastState: IdleViewState,
