@@ -7,6 +7,8 @@ import { goToAddSticker } from "./../add-sticker";
 import { goToSelectionWindow } from "./../selection-window";
 import { Selection } from "../../../domain/selection";
 import { goToEditSticker } from "./../edit-sticker";
+import { useSelection } from "./use-selection";
+import { useDeleteSelected } from "./useDeleteSelected";
 
 export type IdleViewState = {
   type: "idle";
@@ -17,18 +19,12 @@ export type IdleViewState = {
   };
 };
 
-export function useIdleViewModel({
-  nodesModel,
-  setViewState,
-  canvasRect,
-}: ViewModelParams) {
-  const deleteSelected = (viewState: IdleViewState) => {
-    if (viewState.selectedIds.size > 0) {
-      const ids = Array.from(viewState.selectedIds);
-      nodesModel.deleteNodes(ids);
-      setViewState({ ...viewState, selectedIds: new Set() });
-    }
-  };
+export function useIdleViewModel(params: ViewModelParams) {
+  // const { nodesModel, canvasRect, setViewState } = params;
+
+  const { nodesModel, canvasRect, setViewState } = params;
+  const selection = useSelection(params);
+  const deleteSelected = useDeleteSelected(params);
 
   return (idleState: IdleViewState): ViewModel => ({
     nodes: nodesModel.nodes.map((node) => ({
@@ -45,7 +41,7 @@ export function useIdleViewModel({
           return;
         }
 
-        
+        selection.handleNodeClick(idleState, node.id, e);
       },
     })),
     layot: {
@@ -65,9 +61,7 @@ export function useIdleViewModel({
           setViewState(goToAddSticker());
         }
 
-        if (e.key === "Delete" || e.key === "Backspace") {
-          deleteSelected(idleState);
-        }
+        deleteSelected.handleKeyDown(idleState, e);
       },
     },
     overlay: {
@@ -133,8 +127,6 @@ export function useIdleViewModel({
     },
   });
 }
-
-
 
 export function goToIdle({
   selectedIds,
