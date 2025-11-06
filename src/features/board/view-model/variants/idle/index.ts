@@ -21,21 +21,28 @@ export type IdleViewState = {
 export function useGoToEditSticker(params: ViewModelParams) {
   const { setViewState } = params;
 
+  const handleNodeClick = (
+    idleState: IdleViewState,
+    nodeId: string,
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    if (
+      idleState.selectedIds.size === 1 &&
+      idleState.selectedIds.has(nodeId) &&
+      !e.ctrlKey &&
+      !e.shiftKey
+    ) {
+      setViewState(goToEditSticker(nodeId));
+      return { preventNext: true };
+    }
 
-
-
-
-
-
-
-
-  
-
+    return {
+      preventNext: false,
+    };
+  };
 }
 
-export function useGoToAddSticker(params: ViewModelParams) {
-  
-}
+export function useGoToAddSticker(params: ViewModelParams) {}
 
 export function useIdleViewModel(params: ViewModelParams) {
   // const { nodesModel, canvasRect, setViewState } = params;
@@ -43,22 +50,22 @@ export function useIdleViewModel(params: ViewModelParams) {
   const { nodesModel, canvasRect, setViewState } = params;
   const selection = useSelection(params);
   const deleteSelected = useDeleteSelected(params);
+// 3:32:13
+
+
+
+
+
+
+
+
+
 
   return (idleState: IdleViewState): ViewModel => ({
     nodes: nodesModel.nodes.map((node) => ({
       ...node,
       isSelected: selection.isSelected(idleState, node.id),
       onClick: (e) => {
-        if (
-          idleState.selectedIds.size === 1 &&
-          idleState.selectedIds.has(node.id) &&
-          !e.ctrlKey &&
-          !e.shiftKey
-        ) {
-          setViewState(goToEditSticker(node.id));
-          return;
-        }
-
         selection.handleNodeClick(idleState, node.id, e);
       },
     })),
