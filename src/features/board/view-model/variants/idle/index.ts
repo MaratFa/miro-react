@@ -65,9 +65,10 @@ export function useIdleViewModel(params: ViewModelParams) {
           node.id,
           e
         );
-        if (clickResult.preventNext) {
-          return;
-        }
+        if (clickResult.preventNext) return;
+        
+
+        
 
 
 
