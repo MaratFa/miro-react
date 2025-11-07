@@ -40,33 +40,41 @@ export function useGoToEditSticker(params: ViewModelParams) {
       preventNext: false,
     };
   };
+
+  return {
+    handleNodeClick,
+  }
 }
 
 export function useGoToAddSticker(params: ViewModelParams) {}
 
 export function useIdleViewModel(params: ViewModelParams) {
-  // const { nodesModel, canvasRect, setViewState } = params;
-
   const { nodesModel, canvasRect, setViewState } = params;
+
   const selection = useSelection(params);
   const deleteSelected = useDeleteSelected(params);
-// 3:32:13
-
-
-
-
-
-
-
-
-
+  const goToEditSticker = useGoToEditSticker(params);
 
   return (idleState: IdleViewState): ViewModel => ({
     nodes: nodesModel.nodes.map((node) => ({
       ...node,
       isSelected: selection.isSelected(idleState, node.id),
       onClick: (e) => {
-        selection.handleNodeClick(idleState, node.id, e);
+        const clickResult = goToEditSticker.handleNodeClick(
+          idleState,
+          node.id,
+          e
+        );
+        if (clickResult.preventNext) {
+          return;
+        }
+
+
+
+
+
+
+        
       },
     })),
     layot: {
