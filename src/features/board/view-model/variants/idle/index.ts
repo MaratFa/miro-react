@@ -41,6 +41,16 @@ export function useGoToEditSticker(params: ViewModelParams) {
     };
   };
 
+  const handleKeyDown = (
+    idleState: IdleViewState,
+    e: React.KeyboardEvent<HTMLDivElement>
+  ) => {
+    if (e.key === "Delete") {
+      if (idleState.selectedIds.size === 1) {
+        const [id] = idleState.selectedIds.values();
+        setViewState(goToEditSticker(id)
+  )
+
   return {
     handleNodeClick,
   }
@@ -66,16 +76,7 @@ export function useIdleViewModel(params: ViewModelParams) {
           e
         );
         if (clickResult.preventNext) return;
-        
-
-        
-
-
-
-
-
-
-        
+        selection.handleNodeClick(idleState, node.id, e);        
       },
     })),
     layot: {
