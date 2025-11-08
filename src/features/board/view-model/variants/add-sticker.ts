@@ -16,7 +16,7 @@ export function useAddStickerViewModel({
     layot: {
       onKeyDown: (e) => {
         if (e.key === "Escape") {
-          setViewState(goToIdle())
+          setViewState(goToIdle());
         }
       },
     },
@@ -43,5 +43,5 @@ export function useAddStickerViewModel({
 export function goToAddSticker(): AddStickerViewState {
   return {
     type: "add-sticker",
-  }
+  };
 }
