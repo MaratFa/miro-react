@@ -2,12 +2,12 @@ import { distanceFromPoints } from "../../../domain/points";
 import { pointOnScreenToCanvas } from "../../../domain/screen-to-canvas";
 import { ViewModelParams } from "../../view-model-params";
 import { ViewModel } from "../../view-model-type";
-import { goToAddSticker } from "./../add-sticker";
 import { goToSelectionWindow } from "./../selection-window";
 import { Selection } from "../../../domain/selection";
-import { goToEditSticker } from "./../edit-sticker";
 import { useSelection } from "./use-selection";
 import { useDeleteSelected } from "./useDeleteSelected";
+import { useGoToEditSticker } from "./useGoToEditSticker";
+import { useGoToAddSticker } from "./useGoToAddSticker";
 
 export type IdleViewState = {
   type: "idle";
@@ -18,45 +18,42 @@ export type IdleViewState = {
   };
 };
 
-export function useGoToEditSticker(params: ViewModelParams) {
-  const { setViewState } = params;
-
-  const handleNodeClick = (
+function useMouseDown({ setViewState, canvasRect }: ViewModelParams) {
+  const handleOverlayMouseDown = (
     idleState: IdleViewState,
-    nodeId: string,
-    e: React.MouseEvent<HTMLButtonElement>
+    e: React.MouseEvent<HTMLDivElement>
   ) => {
-    if (
-      idleState.selectedIds.size === 1 &&
-      idleState.selectedIds.has(nodeId) &&
-      !e.ctrlKey &&
-      !e.shiftKey
-    ) {
-      setViewState(goToEditSticker(nodeId));
-      return { preventNext: true };
+    setViewState({
+      ...idleState,
+      mouseDown: pointOnScreenToCanvas(
+        {
+          x: e.clientX,
+          y: e.clientY,
+        },
+        canvasRect
+      ),
+    });
+  };
+
+  const handleOverlayMouseUp = (idleState: IdleViewState) => {
+    if (idleState.mouseDown) {
+      setViewState({
+        ...idleState,
+        mouseDown: undefined,
+      });
     }
 
     return {
-      preventNext: false,
+      handleOverlayMouseDown,
     };
   };
-
-  const handleKeyDown = (
-    idleState: IdleViewState,
-    e: React.KeyboardEvent<HTMLDivElement>
-  ) => {
-    if (e.key === "Delete") {
-      if (idleState.selectedIds.size === 1) {
-        const [id] = idleState.selectedIds.values();
-        setViewState(goToEditSticker(id)
-  )
-
-  return {
-    handleNodeClick,
-  }
 }
 
-export function useGoToAddSticker(params: ViewModelParams) {}
+
+
+
+
+
 
 export function useIdleViewModel(params: ViewModelParams) {
   const { nodesModel, canvasRect, setViewState } = params;
@@ -64,6 +61,8 @@ export function useIdleViewModel(params: ViewModelParams) {
   const selection = useSelection(params);
   const deleteSelected = useDeleteSelected(params);
   const goToEditSticker = useGoToEditSticker(params);
+  const goToAddSticker = useGoToAddSticker(params);
+  const mouseDown = useMouseDown(params);
 
   return (idleState: IdleViewState): ViewModel => ({
     nodes: nodesModel.nodes.map((node) => ({
@@ -75,28 +74,18 @@ export function useIdleViewModel(params: ViewModelParams) {
           node.id,
           e
         );
+
         if (clickResult.preventNext) return;
-        selection.handleNodeClick(idleState, node.id, e);        
+        selection.handleNodeClick(idleState, node.id, e);
       },
     })),
     layot: {
       onKeyDown: (e) => {
-        if (
-          !e.shiftKey &&
-          !e.altKey &&
-          !e.metaKey &&
-          !e.ctrlKey &&
-          idleState.selectedIds.size === 1
-        ) {
-          const [id] = idleState.selectedIds.values();
-          setViewState(goToEditSticker(id));
-          return;
-        }
-        if (e.key === "s") {
-          setViewState(goToAddSticker());
-        }
+        const keyDownResult = goToEditSticker.handleKeyDown(idleState, e);
+        if (keyDownResult.preventNext) return;
 
         deleteSelected.handleKeyDown(idleState, e);
+        goToAddSticker.handleKeyDown(e);
       },
     },
     overlay: {
@@ -148,9 +137,7 @@ export function useIdleViewModel(params: ViewModelParams) {
     actions: {
       addSticker: {
         isActive: false,
-        onClick: () => {
-          setViewState(goToAddSticker());
-        },
+        onClick: goToAddSticker.handleActionClick,
       },
     },
   });
