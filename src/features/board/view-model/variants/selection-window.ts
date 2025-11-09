@@ -63,8 +63,6 @@ export function useSelectionWindowWiewModel({
             .filter((node) => node.isSelected)
             .map((node) => node.id);
 
-          console.log(nodesIdsInRect);
-
           setViewState(
             goToIdle({
               selectedIds: selectItems(
