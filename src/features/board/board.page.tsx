@@ -5,12 +5,12 @@ import { useLayoutFocus } from "./hooks/use-layout-focus";
 import { useViewModel } from "./view-model/use-view-model";
 import { useWindowEvents } from "./hooks/use-window-events";
 import { SelectionWindow } from "./ui/selection-window";
-import { Overlay } from "./ui/Overlay";
-import { Layout } from "./ui/Layout";
-import { Dots } from "./ui/Dots";
-import { Canvas } from "./ui/Canvas";
-import { Sticker } from "./ui/Sticker";
-import { Actions } from "./ui/Actions";
+import { Overlay } from "./ui/overlay";
+import { Layout } from "./ui/layout";
+import { Dots } from "./ui/dots";
+import { Canvas } from "./ui/canvas";
+import { Sticker } from "./ui/sticker";
+import { Actions } from "./ui/actions";
 import { ActionButton } from "./ui/action-button";
 import { useNodesDimensions } from "./hooks/use-nodes-dimensions";
 
