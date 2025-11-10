@@ -17,12 +17,14 @@ export type IdleViewState = {
         type: "overlay";
         x: number;
         y: number;
+        isRightClick: boolean;
       }
     | {
         type: "node";
         x: number;
         y: number;
         nodeId: string;
+        isRightClick: boolean;
       };
 };
 
@@ -36,6 +38,7 @@ export function useIdleViewModel(params: ViewModelParams) {
   const mouseDown = useMouseDown(params);
   const selection = useSelection(params);
   const goToNodesDragging = useGoToNodesDragging(params);
+  const goToWindowDragging = useGoToNodesDragging(params);
 
   return (idleState: IdleViewState): ViewModel => ({
     nodes: nodesModel.nodes.map((node) => ({
@@ -55,9 +58,6 @@ export function useIdleViewModel(params: ViewModelParams) {
     })),
     layot: {
       onKeyDown: (e) => {
-        const keyDownResult = goToEditSticker.handleKeyDown(idleState, e);
-        if (keyDownResult.preventNext) return;
-
         deleteSelected.handleKeyDown(idleState, e);
         goToAddSticker.handleKeyDown(e);
       },
@@ -70,6 +70,7 @@ export function useIdleViewModel(params: ViewModelParams) {
       onMouseMove: (e) => {
         goToNodesDragging.handleWindowMouseMove(idleState, e);
         goToSelectionWindow.handleWindowMouseMove(idleState, e);
+        goToWindowDragging.handleWindowMouseMove(idleState, e);
       },
       onMouseUp: () => mouseDown.handleWindowMouseUp(idleState),
     },

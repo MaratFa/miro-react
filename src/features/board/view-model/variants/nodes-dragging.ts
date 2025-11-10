@@ -1,51 +1,42 @@
 import { Point } from "../../domain/points";
-import {
-  createRectFromDimensions,
-  createRectFromPoints,
-  isRectsIntersecting,
-  Rect,
-} from "../../domain/rect";
 import { pointOnScreenToCanvas } from "../../domain/screen-to-canvas";
-import { selectItems } from "../../domain/selection";
 import { ViewModelParams } from "../view-model-params";
 import { ViewModel } from "../view-model-type";
 import { goToIdle } from "./idle";
 
-export type nodesDraggingViewState = {
-  type: "nodes-window";
+export type NodesDraggingViewState = {
+  type: "nodes-dragging";
   startPoint: Point;
   endPoint: Point;
   nodesToMove: Set<string>;
 };
 
-export function useNodesDraggingWiewModel({
+export function useNodesDraggingViewModel({
   nodesModel,
   setViewState,
   canvasRect,
-  nodesDimensions,
+  windowPositionModel,
 }: ViewModelParams) {
-  const getNodes = (state: nodesDraggingViewState, selectionRect: Rect) =>
+  const getNodes = (state: NodesDraggingViewState) =>
     nodesModel.nodes.map((node) => {
-    
+      if (state.nodesToMove.has(node.id)) {
+        const diff = vectorFromPoints(state.startPoint, state.endPoint);
 
+        return {
+          ...node,
+          x: node.x + diff.x,
+          y: node.y + diff.y,
+          isSelected: true,
+        };
+      }
 
-
-
-      
-      return {
-        ...node,
-        isSelected:
-          isRectsIntersecting(nodeRect, selectionRect) ||
-          state.initialSelectedIds.has(node.id),
-      };
+      return node;
     });
 
-  return (state: nodesDraggingViewState): ViewModel => {
-    const rect = createRectFromPoints(state.startPoint, state.endPoint);
-    const nodes = getNodes(state, rect);
+  return (state: NodesDraggingViewState): ViewModel => {
+    const nodes = getNodes(state);
 
     return {
-      nodesDragging: rect,
       nodes,
       window: {
         onMouseMove: (e) => {
@@ -54,6 +45,7 @@ export function useNodesDraggingWiewModel({
               x: e.clientX,
               y: e.clientY,
             },
+            windowPositionModel.position,
             canvasRect
           );
           setViewState({
@@ -62,17 +54,15 @@ export function useNodesDraggingWiewModel({
           });
         },
         onMouseUp: () => {
-          const nodesIdsInRect = nodes
-            .filter((node) => node.isSelected)
-            .map((node) => node.id);
+          const nodesToMove = nodes.filter((node) =>
+            state.nodesToMove.has(node.id)
+          );
+
+          nodesModel.updateNodesPositions(nodesToMove);
 
           setViewState(
             goToIdle({
-              selectedIds: selectItems(
-                state.initialSelectedIds,
-                nodesIdsInRect,
-                "add"
-              ),
+              selectedIds: state.nodesToMove,
             })
           );
         },
@@ -84,16 +74,22 @@ export function useNodesDraggingWiewModel({
 export function goToNodesDragging({
   endPoint,
   startPoint,
-  initialSelectedIds,
+  nodesToMove,
 }: {
   startPoint: { x: number; y: number };
   endPoint: { x: number; y: number };
-  initialSelectedIds?: Set<string>;
-}): nodesDraggingViewState {
+  nodesToMove: Set<string>;
+}): NodesDraggingViewState {
   return {
-    type: "selection-window",
+    type: "nodes-dragging",
     startPoint,
     endPoint,
-    initialSelectedIds: initialSelectedIds ?? new Set(),
+    nodesToMove,
+  };
+}
+function vectorFromPoints(a: Point, b: Point) {
+  return {
+    x: b.x - a.x,
+    y: b.y - a.y,
   };
 }

@@ -22,6 +22,7 @@ export function useSelectionWindowWiewModel({
   nodesModel,
   setViewState,
   canvasRect,
+  windowPositionModel,
   nodesDimensions,
 }: ViewModelParams) {
   const getNodes = (state: SelectionWindowViewState, selectionRect: Rect) =>
@@ -51,6 +52,8 @@ export function useSelectionWindowWiewModel({
               x: e.clientX,
               y: e.clientY,
             },
+        windowPositionModel.position,
+
             canvasRect
           );
           setViewState({
