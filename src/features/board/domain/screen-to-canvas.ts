@@ -6,8 +6,11 @@ export function pointOnScreenToCanvas(
   canvasRect?: {
     x: number;
     y: number;
-  },
+  }
 ) {
   if (!canvasRect) return point;
-  return { x: point.x - canvasRect.x - windowPosition.x, y: point.y - canvasRect.y - windowPosition.y };
+  return {
+    x: (point.x - canvasRect.x) / windowPosition.zoom + windowPosition.x,
+    y: (point.y - canvasRect.y) / windowPosition.zoom - windowPosition.y,
+  };
 }
