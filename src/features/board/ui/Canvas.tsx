@@ -23,7 +23,10 @@ export function Canvas({
       {overlay}
       <div
         style={{
-          transform: `translate(${windowPosition.x}px, ${windowPosition.y}px)`,
+          transformOrigin: "top left",
+          transform: `scale(${
+            windowPosition.zoom
+          }) translate(${-windowPosition.x}px, ${windowPosition.y}px)`,
         }}
       >
         {children}
