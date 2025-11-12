@@ -1,8 +1,10 @@
+import { Point } from "../domain/points";
 import { Rect } from "../domain/rect";
 import { WindowPosition } from "../model/window-position";
 
-type ViewModeNode = {
+type ViewModelStickerNode = {
   id: string;
+  type: "sticker";
   text: string;
   x: number;
   y: number;
@@ -13,6 +15,19 @@ type ViewModeNode = {
   onMouseDown?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   onMouseUp?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
+
+type ViewModelArrowNode = {
+  id: string;
+  type: "arrow";
+  start: Point;
+  end: Point;
+  isSelected?: boolean;
+  onClick?: (e: React.MouseEvent<SVGPathElement>) => void;
+  onMouseDown?: (e: React.MouseEvent<SVGPathElement>) => void;
+  onMouseUp?: (e: React.MouseEvent<SVGPathElement>) => void;
+};
+
+type ViewModeNode = ViewModelStickerNode | ViewModelArrowNode;
 
 export type ViewModel = {
   nodes: ViewModeNode[];
