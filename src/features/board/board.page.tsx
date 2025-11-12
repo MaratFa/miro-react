@@ -9,12 +9,12 @@ import { Overlay } from "./ui/overlay";
 import { Layout } from "./ui/layout";
 import { Dots } from "./ui/dots";
 import { Canvas } from "./ui/canvas";
-import { Sticker } from "./ui/sticker";
+import { Sticker } from "./ui/nodes/sticker";
 import { Actions } from "./ui/actions";
 import { ActionButton } from "./ui/action-button";
 import { useNodesDimensions } from "./hooks/use-nodes-dimensions";
 import { useWindowPositionModel } from "./model/window-position";
-import { Point, vectorFromPoints } from "./domain/points";
+import { Arrow } from "./ui/nodes/arrow";
 
 function BoardPage() {
   const nodesModel = useNodes();
@@ -50,13 +50,17 @@ function BoardPage() {
         onClick={viewModel.canvas?.onClick}
         windowPosition={windowPosition}
       >
-        {viewModel.nodes.map((node) => (
-          <Sticker key={node.id} {...node} ref={nodeRef} />
-        ))}
+        {viewModel.nodes.map((node) => {
+          if (node.type === "sticker") {
+            return <Sticker key={node.id} {...node} ref={nodeRef} />;
+          }
+          if (node.type === "arrow") {
+            return <Arrow key={node.id} {...node} ref={nodeRef} />;
+          }
+        })}
         {viewModel.selectionWindow && (
           <SelectionWindow {...viewModel.selectionWindow} />
         )}
-        <Arrow start={{ x: 30, y: 50 }} end={{ x: 90, y: 90 }} />
       </Canvas>
       <Actions>
         <ActionButton
@@ -74,29 +78,3 @@ function BoardPage() {
 }
 
 export const Component = BoardPage;
-
-function Arrow({ start, end }: { start: Point; end: Point }) {
-  const diff = vectorFromPoints(start, end);
-  const angle = Math.atan2(diff.y, diff.x);
-  const arrowRightAngle = angle + Math.PI * (1 - 1 / 6);
-  const arrowLeftAngle = angle - Math.PI * (1 - 1 / 6);
-
-
-
-
-
-
-
-
-
-  return (
-    <svg className="absolute left-0 top-0 pointer-events-none">
-      <path
-        stroke="black"
-        strokeWidth={2}
-        strokeLinecap="round"
-        d={`M${start.x} ${start.y} L${end.x} ${end.y}`}
-      />
-    </svg>
-  );
-}
