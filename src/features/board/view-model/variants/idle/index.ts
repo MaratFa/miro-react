@@ -1,13 +1,15 @@
+import { Selection } from "../../../domain/selection";
+
 import { ViewModelParams } from "../../view-model-params";
 import { ViewModel } from "../../view-model-type";
-import { Selection } from "../../../domain/selection";
 import { useSelection } from "./use-selection";
 import { useDeleteSelected } from "./use-delete-selected";
-import { useGoToEditSticker } from "./use-go-to-edit-sticker";
 import { useGoToAddSticker } from "./use-go-to-add-sticker";
-import { useMouseDown } from "./use-mouse-down";
+import { useGoToEditSticker } from "./use-go-to-edit-sticker";
 import { useGoToSelectionWindow } from "./use-go-to-selection-window";
+import { useMouseDown } from "./use-mouse-down";
 import { useGoToNodesDragging } from "./use-go-to-nodes-dragging";
+import { useGoToWindowDragging } from "./use-go-to-window-dragging";
 
 export type IdleViewState = {
   type: "idle";
@@ -35,10 +37,10 @@ export function useIdleViewModel(params: ViewModelParams) {
   const goToEditSticker = useGoToEditSticker(params);
   const goToAddSticker = useGoToAddSticker(params);
   const goToSelectionWindow = useGoToSelectionWindow(params);
+  const goToNodesDragging = useGoToNodesDragging(params);
+  const goToWindowDragging = useGoToWindowDragging(params);
   const mouseDown = useMouseDown(params);
   const selection = useSelection(params);
-  const goToNodesDragging = useGoToNodesDragging(params);
-  const goToWindowDragging = useGoToNodesDragging(params);
 
   return (idleState: IdleViewState): ViewModel => ({
     nodes: nodesModel.nodes.map((node) => ({
@@ -46,7 +48,9 @@ export function useIdleViewModel(params: ViewModelParams) {
       isSelected: selection.isSelected(idleState, node.id),
       onMouseDown: (e) => mouseDown.handleNodeMouseDown(idleState, node.id, e),
       onMouseUp: (e) => {
-        if (!mouseDown.getIsStickerMouseDown(idleState, node.id)) return;
+        if (!mouseDown.getIsStickerMouseDown(idleState, node.id)) {
+          return;
+        }
         const clickResult = goToEditSticker.handleNodeClick(
           idleState,
           node.id,
@@ -72,6 +76,7 @@ export function useIdleViewModel(params: ViewModelParams) {
         goToSelectionWindow.handleWindowMouseMove(idleState, e);
         goToWindowDragging.handleWindowMouseMove(idleState, e);
       },
+
       onMouseUp: () => mouseDown.handleWindowMouseUp(idleState),
     },
     actions: {
