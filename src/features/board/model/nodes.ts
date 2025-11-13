@@ -82,7 +82,7 @@ export function useNodes() {
     }[]
   ) => {
     const record = Object.fromEntries(
-      positions.map((p) => [`${p.id}${p.type}`, p])
+      positions.map((p) => [`${p.id}${p.type ?? ""}`, p])
     );
 
     setNodes((lastNodes) =>
