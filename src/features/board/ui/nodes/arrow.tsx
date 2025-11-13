@@ -1,5 +1,6 @@
 import { Ref } from "react";
 import { Point, vectorFromPoints } from "../../domain/points";
+import clsx from "clsx";
 
 export function Arrow({
   start,
@@ -8,10 +9,12 @@ export function Arrow({
   onClick,
   onMouseDown,
   omMouseUp,
+  isSelected,
 }: {
   start: Point;
   end: Point;
   ref: Ref<SVGPathElement>;
+  isSelected?: boolean;
   onClick?: (e: React.MouseEvent<SVGPathElement>) => void;
   onMouseDown?: (e: React.MouseEvent<SVGPathElement>) => void;
   omMouseUp?: (e: React.MouseEvent<SVGPathElement>) => void;
@@ -32,7 +35,10 @@ export function Arrow({
   return (
     <svg className="absolute left-0 top-0 pointer-events-none overflow-visible">
       <path
-        className="pointer-events-auto "
+        className={clsx(
+          "pointer-events-auto",
+          isSelected && "stroke-blue-500 stroke-2 fill-blue-500"
+        )}
         stroke="black"
         ref={ref}
         strokeWidth={2}

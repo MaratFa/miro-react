@@ -23,9 +23,17 @@ import {
   WindowDraggingViewState,
 } from "./variants/window-dragging";
 import { useZoomDecorator } from "./decorator/zoom";
+import { AddArrowViewState, useAddArrowViewModel } from "./variants/add-arrow";
+import { useCommonActionsDecorator } from "./decorator/common-actions";
+import {
+  DrawArrowViewState,
+  useDrawArrowViewModel,
+} from "./variants/draw-arrow";
 
 export type ViewState =
+  | AddArrowViewState
   | AddStickerViewState
+  | DrawArrowViewState
   | EditStickerViewState
   | IdleViewState
   | SelectionWindowViewState
@@ -40,26 +48,38 @@ export function useViewModel(params: Omit<ViewModelParams, "setViewState">) {
     setViewState,
   };
 
+  const addArrowViewModel = useAddArrowViewModel(newParams);
+  const drawArrowViewModel = useDrawArrowViewModel(newParams);
   const addStickerViewModel = useAddStickerViewModel(newParams);
   const editStickerViewModel = useEditStickerViewModel(newParams);
   const idleViewModel = useIdleViewModel(newParams);
   const selectionWindowViewModel = useSelectionWindowWiewModel(newParams);
   const nodesDraggingViewModel = useNodesDraggingViewModel(newParams);
   const windowDraggingViewModel = useWindowDraggingViewModel(newParams);
-
   const zoomDecorator = useZoomDecorator(newParams);
+  const commonActionsDecorator = useCommonActionsDecorator(newParams);
 
   let viewModel: ViewModel;
   switch (viewState.type) {
-    case "add-sticker":
-      viewModel = addStickerViewModel();
-      break;
-    case "edit-sticker": {
-      viewModel = editStickerViewModel(viewState);
+    case "idle": {
+      viewModel = commonActionsDecorator(idleViewModel(viewState));
       break;
     }
-    case "idle": {
-      viewModel = idleViewModel(viewState);
+    case "add-arrow": {
+      viewModel = commonActionsDecorator(addArrowViewModel());
+      break;
+    }
+    case "add-sticker": {
+      viewModel = commonActionsDecorator(addStickerViewModel());
+      break;
+    }
+    case "draw-arrow": {
+      console.log("draw-arrow", viewState);
+      viewModel = drawArrowViewModel();
+      break;
+    }
+    case "edit-sticker": {
+      viewModel = editStickerViewModel(viewState);
       break;
     }
     case "selection-window": {
@@ -67,7 +87,6 @@ export function useViewModel(params: Omit<ViewModelParams, "setViewState">) {
       break;
     }
     case "nodes-dragging": {
-      console.log("nodes-dragging", viewState);
       viewModel = nodesDraggingViewModel(viewState);
       break;
     }
