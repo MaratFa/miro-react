@@ -15,7 +15,7 @@ export function useAddStickerViewModel({
 }: ViewModelParams) {
   return (): ViewModel => ({
     nodes: nodesModel.nodes,
-    layot: {
+    layout: {
       onKeyDown: (e) => {
         if (e.key === "Escape") {
           setViewState(goToIdle());
