@@ -7,10 +7,10 @@ export function useCommonActionsDecorator({ setViewState }: ViewModelParams) {
   return (viewModel: ViewModel): ViewModel => {
     return {
       ...viewModel,
-      layot: {
-        ...viewModel.layot,
+      layout: {
+        ...viewModel.layout,
         onKeyDown: (e) => {
-          viewModel.layot?.onKeyDown?.(e);
+          viewModel.layout?.onKeyDown?.(e);
           if (e.key === "s") {
             setViewState(goToAddSticker());
           }

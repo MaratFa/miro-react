@@ -58,7 +58,7 @@ export function useIdleViewModel(params: ViewModelParams) {
         selection.handleNodeClick(idleState, node.id, e);
       },
     })),
-    layot: {
+    layout: {
       onKeyDown: (e) => {
         deleteSelected.handleKeyDown(idleState, e);
       },
