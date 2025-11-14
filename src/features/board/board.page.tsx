@@ -35,7 +35,7 @@ function BoardPage() {
   const windowPosition =
     viewModel.windowPosition ?? windowPositionModel.position;
   return (
-    <Layout ref={focusLayoutRef} onKeyDown={viewModel.layot?.onKeyDown}>
+    <Layout ref={focusLayoutRef} onKeyDown={viewModel.layout?.onKeyDown}>
       <Dots windowPosition={windowPosition} />
 
       <Canvas
