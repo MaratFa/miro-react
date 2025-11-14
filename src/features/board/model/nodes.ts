@@ -19,7 +19,7 @@ type ArrowNode = NodeBase & {
   end: Point;
 };
 
-type Node = StickerNode | ArrowNode;
+export type Node = StickerNode | ArrowNode;
 
 export function useNodes() {
   const [nodes, setNodes] = useState<Node[]>([
@@ -40,8 +40,8 @@ export function useNodes() {
     {
       id: "3",
       type: "arrow",
-      start: { x: 110, y: 110 },
-      end: { x: 210, y: 210 },
+      start: { x: 10, y: 10, relativeTo: "1" },
+      end: { x: 20, y: 20, relativeTo: "2" },
     },
   ]);
 
